@@ -4,4 +4,5 @@
 * Lists
 * Lambda function
 * Map function
-* Decorators, etc
+* Decorators
+* OOPS Concepts
