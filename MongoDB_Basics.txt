@@ -1,0 +1,276 @@
+=========================================================================================
+
+Introduction to Mongo DB
+
+=========================================================================================
+1.NO SQL2 database
+2.written C,C++,JS
+3.document oriented.
+5.Open source (HBase,DynomDB,Apache cassenntra)
+
+=========================================================================================
+NOSQL	vs		RDBMS
+
+Hbase          	MySQL
+MongoDB       	Oracle
+DynomDB        	DB2  
+Cassendra      	SQL Server
+
+=========================================================================================
+Differences:
+
+MongoDB          						Oracle/MySQL
+=========================================================================================
+unstructrued and semistructured			structrued
+
+schema less								schema based
+		
+Database                				Database
+		
+Scalabilty								Not Scaled
+		
+collection              				table
+		
+document                				rows/tupple
+		
+fields                  				columns
+		
+_id (auto)              				primary key 
+		
+embeded documents       				joins
+		
+mongo/mongod            				sqlplus/oracledb  
+		
+Emnbeded documents						Joins
+
+========================================================================================
+RDBMS  : ACID
+
+A transaction in a database system must maintain 
+Atomicity,
+Consistency, 
+Isolation, and 
+Durability − commonly known as ACID properties − 
+in order to ensure accuracy, completeness, and data integrity. ... Consistency − The database must remain in a consistent state after any transaction.
+
+
+NoSQL : CAP Theorem :
+
+Consistency: every read would get you the most recent write
+Availability: every node (if not failed) always executes queries
+Partition-tolerance: even if the connections between nodes are down, the other two (A & C) promises, are kept.
+
+========================================================================================
+B+JSON  (Java Script Object Notation)
+========================================================================================
+BJSON
+
+			ID		Name			Salary		DOB				AGE    
+RDBMS    :  101     Arnav Dutta		120000		31-July-1982    35
+
+
+NOSQL   :  	{
+				id:101,
+				name:"Arnav Dutta",
+				salary:12000,
+				dob:"31-July-1982",
+				age:35
+			}
+            
+			{
+				id:102,
+				name:"Arnav Dutta",
+				salary:12000,
+				dob:"31-July-1993",
+				age:35,
+				address:{
+							flatNo:502,
+							bldName:'A4',
+							society:'Sneha Vihar',
+							area:'Shivane',
+							city:'Pune'
+						}
+			}
+
+key: string
+value: number, string, array, boolean, object
+========================================================================================
+
+Installation and Setup
+
+========================================================================================
+1.Install MongDB  (C:\Program Files\MongoDB)
+
+2.Open CMD Prompt and set path to MongoDB Installation bin folder
+	set path=C:\Program Files\MongoDB\Server\4.2\bin;
+
+3.Start the MongoDB Server:
+	Default Location of Server:   "C:\Program Files\MongoDB\Server\4.2\bin"
+	cmd -->	C:\Program Files\MongoDB\Server\4.2\bin>mongodb <enter>
+	Default dbpath --> 'C:\data\db'
+
+	Custom Location:  "D:\arnav-mongodb"
+	cmd --> C:\Program Files\MongoDB\Server\4.2\bin>start mongod --dbpath e:\arnav-mongodb <enter>
+
+4.Start MongoDB Client:
+	cmd --> C:\Program Files\MongoDB\Server\4.2\bin>mongo <enter>
+
+========================================================================================
+
+_id:    ObjectId(7df78ad8902c)
+
+Current Time Stamp				4 bytes 
+Machine Id                    	3 bytes 
+MongoDB Process Id            	2 bytes 
+Simple Incremental Value      	3 bytes 
+
+========================================================================================
+
+MongoDB Script:
+
+========================================================================================
+
+db
+
+use school
+
+show dbs
+
+db.createCollection("students");
+
+db.students.insert({name:'Ram',marks:45});
+db.students.insert({name:'Rahim',marks:55,area:'Warje'});
+db.students.insert({name:'David',marks:55,area:'Warje',city:'Pune'});
+db.students.insert({name:'Sunil',marks:55,area:'Warje',city:'Mumbai'});
+db.students.insert({name:'Raj',marks:55,area:'Warje',city:'Mumbai'});
+db.students.insert({name:'Pradeep',marks:55,area:'Warje',city:'Pune'});
+db.students.insert({name:'Sachin',marks:55,area:'Shivane',city:'Pune'});
+db.students.insert({_id:3456,name:'Mahesh',marks:55,area:'Kothrud',city:'Pune'});
+db.students.insert({_id:34356,name:'Mohan',marks:55,area:'Kothrud',city:'Pune',courses:['Java','MongoDB','Python']});
+
+db.students.find();
+db.students.find().pretty();
+db.students.find({marks:77}).pretty();
+db.students.find({city:'Pune'});
+
+db.students.findOne({city:'Pune'});
+
+db.students.find({name:'David',city:'Pune'});
+db.students.find({name:'David',city:'Mumbai'});
+db.students.find({$and:[{name:'David'},{city:'Mumbai'}]});
+db.students.find({$or:[{name:'David'},{city:'Mumbai'}]});
+db.students.find({marks:55}).pretty();
+db.students.find({marks:{$lt:66}}).pretty();
+db.students.find({marks:{$lte:66}}).pretty();
+db.students.find({marks:{$gte:66}}).pretty();
+db.students.find({marks:{$gt:66}}).pretty();
+db.students.find({},{_id:0}).pretty();
+db.students.find({},{_id:0,city:0,area:0,courses:0}).pretty();
+db.students.find({},{name:1,marks:1}).pretty();
+
+db.students.update({marks:55},{$set:{marks:66}},{multi:true});
+db.students.update({marks:77},{$set:{name:'Rajesh',city:'Solapur'}},{multi:true});
+db.students.update({marks:77},{$set:{name:'Rajesh',city:'Solapur'}},{upsert:true});
+
+
+db.students.remove({marks:77});
+db.students.remove({marks:{$lt:77}});
+
+db.teachers.insert({id:101,name:"Pradeep Chinchole",salary:12000,dob:"31-July-1982",age:35,isMarried:true,
+                address:{flatNo:502,bldName:'A4',society:'Sneha Vihar',area:'Shivane',city:'Pune'}
+                });
+db.teachers.insert({id:103,name:"Sachin Chinchole",salary:14000,dob:"31-July-1982",age:35,isMarried:false,
+                address:{flatNo:501,bldName:'A1',society:'Sneha Vihar',area:'Shivane',city:'Pune'}
+                });
+
+========================================================================================
+
+Limit, Skip, Sort
+
+========================================================================================
+
+db.students.find().limit(5);
+
+db.students.find().skip(3);
+
+db.students.find().skip(3).limit(4)
+
+db.students.find({},{_id,0,area:0,city:0}).sort({"name":-1});   //decending
+
+db.students.find().sort({"name":1});   //ascending
+
+db.students.find().limit(3).pretty();
+
+db.students.sort();
+
+db.students.find().forEach(function(s){print(s.name+" "+s.marks)});
+
+db.students.find().forEach(function(s){
+if(s.marks>40)
+print(s.name+" "+s.marks);
+});
+
+db.students.find({marks:{$lt:66}});
+
+db.students.find().max({marks:77});
+
+db.students.find( { _id: 101 } ).max({marks:56.77});
+
+db.students.aggregate([{ "$group": {"_id": null,"max": { "$max": "$marks" },"min": { "$min": "$marks" } }}]) 
+
+db.students.aggregate([{ "$group": {"_id": null,
+                         "max marks of student": { "$max": "$marks" },
+                         "min marks of student": { "$min": "$marks" },
+                         "sum of all marks": { "$sum": "$marks" },
+                         "avg of all marks": { "$avg": "$marks" },
+                        }}]);
+
+db.students.find({$and:
+       [{dob:{$gt:new Date("1995-01-01")}},{dob:{$lt:new Date("2017-01-01")}}]});
+
+db.students.find([{dob:{$lt:new Date("2001-01-01")},dob:{$gt:new Date("1995-01-01")}});
+
+========================================================================================
+
+Indexes in databases
+
+========================================================================================
+Indexes are the special data structures that stores small portion of data set in easy to pass way.
+
+Why we use indexes?
+	It supports efficient resolution of queries.
+
+
+
+
+use school;
+
+db.createCollection("students");
+
+db.teachers.insert({"name":"Pradeep",age:35,address:{area:"Warje",city:"Pune"}});
+
+db.students.insert({"name":"Pradeep"});
+
+db.students.insert({"name":"Pradeep",age:35});
+
+db.students.insert({"name":"Pradeep",age:35,address:"Pune"});
+
+db.students.insert({"name":"Sachin",age:35,address:"Pune"});
+
+db.students.insert({"name":"Mohan",age:35,address:"Mumbai"});
+
+db.students.insert({"name":"Mahesh",age:65,address:"Mumbai"});
+
+db.students.find();
+
+
+========================================================================================
+
+Map Reduce
+
+========================================================================================
+function map() {emit (this.name,this.address)};
+function reduce(key,value){ return value+"Hi";}
+db.students.mapReduce(map,reduce,{out:{inline:1}});
+db.students.mapReduce(map,reduce,{out:{inline:3},query:{address:'Mumbai'}});
+
